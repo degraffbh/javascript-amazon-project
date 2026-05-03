@@ -52,6 +52,8 @@ products.forEach((product) => {
     </div>`;
 });
 
+let CART_TOTAL = 0;
+
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
 document.querySelectorAll(".add-to-cart-button")
@@ -72,6 +74,8 @@ document.querySelectorAll(".add-to-cart-button")
                 quantity: 1
             })
         }
-        console.log(cart);
+
+        CART_TOTAL += 1;
+        document.querySelector(".cart-quantity").innerHTML = CART_TOTAL;
     });
 });
