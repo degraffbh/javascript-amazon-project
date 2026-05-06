@@ -1,5 +1,6 @@
-let productsHTML = ``;
+import {cart} from "../data/cart.js";
 
+let productsHTML = ``;
 products.forEach((product) => {
     productsHTML += 
     `<div class="product-container">
@@ -51,11 +52,10 @@ products.forEach((product) => {
         </button>
     </div>`;
 });
+document.querySelector(".products-grid").innerHTML = productsHTML;
 
 let CART_TOTAL = 0;
 let addedMsgTimeoutID = null;
-
-document.querySelector(".products-grid").innerHTML = productsHTML;
 
 document.querySelectorAll(".add-to-cart-button")
 .forEach((button) => {
