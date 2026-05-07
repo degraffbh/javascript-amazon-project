@@ -1,13 +1,20 @@
-export let cart = [{
-    productID: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    quantity: 2
-}, {
-    productID: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-    quantity: 1
-}];
+export let cart = JSON.parse(localStorage.getItem("cart"))
+if (!cart) {
+    cart = [{
+        productID: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        quantity: 2
+    }, {
+        productID: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+        quantity: 1
+    }];
+}
 
+function saveToStorage() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+let CART_TOTAL = 0;
 export function addToCart(productID) {
-    let CART_TOTAL = 0;
     let matchingItem;
     cart.forEach((cartItem) => {
         if (productID === cartItem.productID) matchingItem = cartItem;
@@ -25,10 +32,12 @@ export function addToCart(productID) {
 
     CART_TOTAL += quantitySelctorValue;
     document.querySelector(".cart-quantity").innerHTML = CART_TOTAL;
+
+    saveToStorage();
 }
 
+let addedMsgTimeoutID = null;
 export function addMessage() {
-    let addedMsgTimeoutID = null;
     const addedMessage = document.querySelector(`.added-to-cart-${productID}`);
     addedMessage.classList.add("addMsg");
     clearInterval(addedMsgTimeoutID);
@@ -43,4 +52,6 @@ export function removeFromCart(productID) {
         if (cartItem.productID != productID) newCart.push(cartItem);
     })
     cart = newCart;
+
+    saveToStorage();
 }
