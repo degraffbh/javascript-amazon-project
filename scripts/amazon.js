@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart, addMessage } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = ``;
@@ -55,37 +55,11 @@ products.forEach((product) => {
 });
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
-let CART_TOTAL = 0;
-let addedMsgTimeoutID = null;
-
 document.querySelectorAll(".add-to-cart-button")
 .forEach((button) => {
     button.addEventListener("click", () => {
         const productID = button.dataset.productId;
-
-        let matchingItem;
-        cart.forEach((item) => {
-            if (productID == item.productID) matchingItem = item;
-        })
-
-        const quantitySelctorValue = Number(document.querySelector(`.quantity-selector-${productID}`).value);
-        if (matchingItem) {
-            matchingItem.quantity += quantitySelctorValue;
-        } else {
-            cart.push({
-                productID: productID,
-                quantity: quantitySelctorValue
-            })
-        }
-
-        CART_TOTAL += quantitySelctorValue;
-        document.querySelector(".cart-quantity").innerHTML = CART_TOTAL;
-
-        const addedMessage = document.querySelector(`.added-to-cart-${productID}`);
-        addedMessage.classList.add("addMsg");
-        clearInterval(addedMsgTimeoutID);
-        addedMsgTimeoutID = setTimeout(() => {
-            addedMessage.classList.remove("addMsg");
-        }, 2000)
+        addToCart(productID);
+        addMessage();
     });
 });
