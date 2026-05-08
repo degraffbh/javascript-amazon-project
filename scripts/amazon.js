@@ -61,6 +61,6 @@ document.querySelectorAll(".add-to-cart-button")
     button.addEventListener("click", () => {
         const productID = button.dataset.productId;
         addToCart(productID);
-        addMessage();
+        addMessage(productID);
     });
 });

@@ -8,12 +8,34 @@ if (!cart) {
         quantity: 1
     }];
 }
+let CART_TOTAL = 0;
+
+function calculateCartQuantity() {
+    CART_TOTAL = 0;
+    cart.forEach((cartItem) => {
+        CART_TOTAL += cartItem.quantity;
+    });
+}
 
 function saveToStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-let CART_TOTAL = 0;
+function updateCartDisplay() {
+    const cartQuantityElement = document.querySelector(".cart-quantity");
+    const returnLinkElement = document.querySelector(".return-to-home-link");
+    
+    if (cartQuantityElement) {
+        cartQuantityElement.innerHTML = CART_TOTAL;
+    }
+    if (returnLinkElement) {
+        returnLinkElement.innerHTML = CART_TOTAL;
+    }
+}
+
+calculateCartQuantity();
+updateCartDisplay();
+
 export function addToCart(productID) {
     let matchingItem;
     cart.forEach((cartItem) => {
@@ -31,13 +53,12 @@ export function addToCart(productID) {
     }
 
     CART_TOTAL += quantitySelctorValue;
-    document.querySelector(".cart-quantity").innerHTML = CART_TOTAL;
-
+    updateCartDisplay();
     saveToStorage();
 }
 
 let addedMsgTimeoutID = null;
-export function addMessage() {
+export function addMessage(productID) {
     const addedMessage = document.querySelector(`.added-to-cart-${productID}`);
     addedMessage.classList.add("addMsg");
     clearInterval(addedMsgTimeoutID);
@@ -48,10 +69,14 @@ export function addMessage() {
 
 export function removeFromCart(productID) {
     const newCart = [];
+    let quantityToRemove = 0;
     cart.forEach((cartItem) => {
         if (cartItem.productID != productID) newCart.push(cartItem);
+        if (cartItem.productID == productID) quantityToRemove = cartItem.quantity;
     })
     cart = newCart;
 
+    CART_TOTAL -= quantityToRemove;
+    updateCartDisplay();
     saveToStorage();
 }
