@@ -80,3 +80,17 @@ export function removeFromCart(productID) {
     updateCartDisplay();
     saveToStorage();
 }
+
+export function editItemQuantity(productID) {
+    const newQuantityValue = Number(document.querySelector(".quantity-input").value || 0);
+    if (newQuantityValue > 0) {
+        cart.forEach((item) => {
+            if (item.productID == productID) item.quantity = newQuantityValue;
+        })
+
+        document.querySelector(".quantity-label").innerHTML = newQuantityValue;
+        calculateCartQuantity();
+        updateCartDisplay();
+        saveToStorage();
+    }
+}
