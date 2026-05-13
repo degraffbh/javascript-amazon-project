@@ -19,11 +19,18 @@ function calculateCartQuantity() {
     });
 }
 
+export function getCartQuantity() {
+    calculateCartQuantity();
+    return CART_TOTAL;
+}
+
 function saveToStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function updateCartDisplay() {
+    calculateCartQuantity();
+
     const cartQuantityElement = document.querySelector(".cart-quantity");
     const returnLinkElement = document.querySelector(".return-to-home-link");
     
@@ -35,7 +42,6 @@ function updateCartDisplay() {
     }
 }
 
-calculateCartQuantity();
 updateCartDisplay();
 
 export function addToCart(productID) {
@@ -84,15 +90,13 @@ export function removeFromCart(productID) {
     saveToStorage();
 }
 
-export function editItemQuantity(productID) {
-    const newQuantityValue = Number(document.querySelector(".quantity-input").value || 0);
+export function editItemQuantity(productID, newQuantity) {
+    const newQuantityValue = Number(newQuantity || 0);
     if (newQuantityValue > 0) {
         cart.forEach((item) => {
             if (item.productID == productID) item.quantity = newQuantityValue;
         });
 
-        document.querySelector(".quantity-label").innerHTML = newQuantityValue;
-        calculateCartQuantity();
         updateCartDisplay();
         saveToStorage();
     }
