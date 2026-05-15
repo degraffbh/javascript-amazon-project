@@ -1,18 +1,18 @@
 class Cart {
     cartItems;
-    localStorageKey;
+    #localStorageKey; //private property
     CART_TOTAL = 0;
     addedMsgTimeoutID = null;
 
     constructor(localStorageKey) {
-        this.localStorageKey = localStorageKey;
+        this.#localStorageKey = localStorageKey;
 
-        this.loadFromStorage();
-        this.updateCartDisplay();
+        this.#loadFromStorage();
+        this.#updateCartDisplay();
     }
 
-    loadFromStorage() {
-        this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey))
+    #loadFromStorage() {
+        this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey))
         if (!this.cartItems) {
             this.cartItems = [{
                 productID: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -26,8 +26,22 @@ class Cart {
         }
     }
 
+    #updateCartDisplay() {
+        this.calculateCartQuantity();
+
+        const cartQuantityElement = document.querySelector(".cart-quantity");
+        const returnLinkElement = document.querySelector(".return-to-home-link");
+        
+        if (cartQuantityElement) {
+            cartQuantityElement.innerHTML = this.CART_TOTAL;
+        }
+        if (returnLinkElement) {
+            returnLinkElement.innerHTML = this.CART_TOTAL;
+        }
+    }
+
     saveToStorage() {
-        localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+        localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
     }
 
     calculateCartQuantity() {
@@ -40,20 +54,6 @@ class Cart {
     getCartQuantity() {
         this.calculateCartQuantity();
         return this.CART_TOTAL;
-    }
-
-    updateCartDisplay() {
-        this.calculateCartQuantity();
-
-        const cartQuantityElement = document.querySelector(".cart-quantity");
-        const returnLinkElement = document.querySelector(".return-to-home-link");
-        
-        if (cartQuantityElement) {
-            cartQuantityElement.innerHTML = this.CART_TOTAL;
-        }
-        if (returnLinkElement) {
-            returnLinkElement.innerHTML = this.CART_TOTAL;
-        }
     }
 
     addToCart(productID) {
