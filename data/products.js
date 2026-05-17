@@ -1,7 +1,7 @@
 export function getProduct(productID) {
   let matchingProduct;
   products.forEach((product) => {
-      if (productID === product.id) matchingProduct = product;
+    if (productID === product.id) matchingProduct = product;
   });
 
   return matchingProduct;
@@ -24,6 +24,23 @@ class Product {
 
   getStarsURL() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  extraInfoHTML() {
+    return "";
+  }
+}
+
+class Clothing extends Product {
+  sizeChartLink;
+
+  constructor(productDetails) {
+    super(productDetails); //calls constructor of parent class
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  extraInfoHTML() {
+    return `<a href="${this.sizeChartLink}" target="_blank">Size chart</a>`;
   }
 }
 
@@ -687,5 +704,8 @@ export const products = [
     ]
   }
 ].map((productDetails) => { //loops through every product and returns a class version of it
+  if (productDetails.type === "clothing") {
+    return new Clothing(productDetails);
+  }
   return new Product(productDetails);
 });
